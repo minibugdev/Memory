@@ -14,8 +14,6 @@ abstract external class Firebase {
     }
 
     class Reference {
-
-        @JsName("on")
         fun <T> on(action: String, callback: (Data<T>) -> Unit)
     }
 

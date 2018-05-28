@@ -1,23 +1,22 @@
 package app
 
+import app.components.comments
 import app.firebase.FirebaseConfig
 import app.firebase.FirebaseOperation
 import app.firebase.firebase
 import app.models.Message
 import logo.logo
-import react.RBuilder
-import react.RComponent
-import react.RProps
-import react.RState
-import react.dom.code
+import react.*
 import react.dom.div
 import react.dom.h2
-import react.dom.p
-import ticker.ticker
 
-class App : RComponent<RProps, RState>() {
-    override fun RState.init() {
-        val database = FirebaseConfig(projectId = "tingpop-project",
+interface AppState : RState {
+    var messages: Array<Message>
+}
+
+class App : RComponent<RProps, AppState>() {
+    private val database by lazy {
+        FirebaseConfig(projectId = "tingpop-project",
                 apiKey = "AIzaSyDvGg75Qax-8DYEsvcK2cTQr6AQ4v4tHQk",
                 authDomain = "tingpop-project.firebaseapp.com",
                 databaseURL = "https://tingpop-project.firebaseio.com",
@@ -27,11 +26,17 @@ class App : RComponent<RProps, RState>() {
                     firebase.initializeApp(config = this)
                     firebase.database()
                 }
+    }
 
+    override fun AppState.init() {
+        messages = emptyArray()
+    }
+
+    override fun componentDidMount() {
         database.ref("messages")
                 .on<Array<Message>>(FirebaseOperation.VALUE) {
-                    it.value().forEach {
-                        console.log(it.message)
+                    setState {
+                        messages = it.value()
                     }
                 }
     }
@@ -43,13 +48,9 @@ class App : RComponent<RProps, RState>() {
                 +"Welcome to React with Kotlin"
             }
         }
-        p("App-intro") {
-            +"To get started, edit "
-            code { +"app/App.kt" }
-            +" and save to reload."
-        }
-        p("App-ticker") {
-            ticker()
+
+        if (state.messages.isNotEmpty()) {
+            comments(state.messages)
         }
     }
 }
