@@ -4,20 +4,20 @@ package app.firebase
 external val firebase: Firebase
 
 @JsModule("firebase")
-abstract external class Firebase {
+external interface Firebase {
     fun initializeApp(config: FirebaseConfig)
 
     fun database(): Database
 
-    class Database {
+    interface Database {
         fun ref(table: String): Reference
     }
 
-    class Reference {
+    interface Reference {
         fun <T> on(action: String, callback: (Data<T>) -> Unit)
     }
 
-    class Data<out T> {
+    interface Data<out T> {
 
         @JsName("val")
         fun value(): T
