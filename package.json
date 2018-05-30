@@ -5,7 +5,8 @@
   "dependencies": {
     "firebase": "^5.0.4",
     "react": "^16.4.0",
-    "react-dom": "^16.4.0"
+    "react-dom": "^16.4.0",
+    "semantic-ui-react": "^0.80.2"
   },
   "devDependencies": {
     "react-scripts-kotlin": "2.1.10"
