@@ -11,7 +11,7 @@ interface CommentsProps : RProps {
     var messages: Array<Message>
 }
 
-class Comments(props: CommentsProps) : RComponent<CommentsProps, RState>(props) {
+class CommentsComponent(props: CommentsProps) : RComponent<CommentsProps, RState>(props) {
     override fun RBuilder.render() {
         val messages = props.messages
         if (messages.isEmpty())
@@ -25,6 +25,6 @@ class Comments(props: CommentsProps) : RComponent<CommentsProps, RState>(props) 
     }
 }
 
-fun RBuilder.comments(messages: Array<Message>) = child(Comments::class) {
+fun RBuilder.comments(messages: Array<Message>) = child(CommentsComponent::class) {
     attrs.messages = messages
 }

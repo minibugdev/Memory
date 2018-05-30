@@ -13,7 +13,7 @@ interface CommentProps : RProps {
     var message: Message
 }
 
-class Comment(props: CommentProps) : RComponent<CommentProps, RState>(props) {
+class CommentComponent(props: CommentProps) : RComponent<CommentProps, RState>(props) {
     override fun RBuilder.render() {
         val message = props.message
 
@@ -28,6 +28,6 @@ class Comment(props: CommentProps) : RComponent<CommentProps, RState>(props) {
     }
 }
 
-fun RBuilder.comment(message: Message) = child(Comment::class) {
+fun RBuilder.comment(message: Message) = child(CommentComponent::class) {
     attrs.message = message
 }
