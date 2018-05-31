@@ -1,14 +1,13 @@
 package app
 
-import app.components.comments
 import app.firebase.FirebaseConfig
 import app.firebase.FirebaseOperation
 import app.firebase.firebase
 import app.models.Message
-import logo.logo
+import app.semanticui.Container
+import app.semanticui.Image
+import app.semanticui.TextAlign
 import react.*
-import react.dom.div
-import react.dom.h2
 
 interface AppState : RState {
     var messages: Array<Message>
@@ -42,16 +41,22 @@ class App : RComponent<RProps, AppState>() {
     }
 
     override fun RBuilder.render() {
-        div("App-header") {
-            logo()
-            h2 {
-                +"Welcome to React with Kotlin"
+        Container {
+            attrs {
+                fluid = true
+                textAlign = TextAlign.RIGHT
+            }
+
+            Image {
+                attrs {
+                    src = "https://react.semantic-ui.com/assets/images/wireframe/image.png"
+                    fluid = true
+                }
             }
         }
-
-        if (state.messages.isNotEmpty()) {
-            comments(state.messages)
-        }
+//        if (state.messages.isNotEmpty()) {
+//            comments(state.messages)
+//        }
     }
 }
 
