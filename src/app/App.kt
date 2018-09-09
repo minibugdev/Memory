@@ -6,8 +6,11 @@ import app.firebase.FirebaseOperation
 import app.firebase.firebase
 import app.models.Message
 import kotlinx.css.*
+import kotlinx.css.properties.LineHeight
 import react.*
+import react.dom.br
 import react.dom.div
+import react.dom.strong
 import styled.*
 
 interface AppState : RState {
@@ -51,7 +54,7 @@ class App : RComponent<AppProps, AppState>() {
         val componentStyles = ComponentStyles(props)
 
         styledDiv {
-            css { +componentStyles.coverBackground }
+            css { +componentStyles.coverImage }
         }
 
         div {
@@ -59,11 +62,29 @@ class App : RComponent<AppProps, AppState>() {
                 css { +componentStyles.cover }
             }
 
-            styledSection {
+            styledDiv {
                 css {
-                    padding(20.px)
-                    backgroundColor = Color.gray
-                    height = 120.px
+                    padding(60.px, 0.px)
+                    fontSize = 18.px
+                    backgroundColor = Color("#EEEEEE")
+                }
+                styledP {
+                    css {
+                        lineHeight = LineHeight("1.8em")
+                    }
+                    +"On the 15th of September, 2018"
+                    br {}
+                    strong {
+                        +"Unchalee Saechang & Teeranai Buddee"
+                    }
+                    br {}
+                    +"eloped in Kong Garden View Resort, Chiang Rai"
+                }
+            }
+
+            styledDiv {
+                styledH3 {
+                    +"OUR STORY"
                 }
             }
         }
@@ -71,7 +92,7 @@ class App : RComponent<AppProps, AppState>() {
 
     private inner class ComponentStyles(private val props: AppProps) : StyleSheet("ComponentStyles") {
 
-        val coverBackground by css {
+        val coverImage by css {
             backgroundImage = Image("url('${props.coverImageUrl}')")
             backgroundRepeat = BackgroundRepeat.noRepeat
             backgroundPosition = "center"
@@ -103,7 +124,7 @@ fun RBuilder.app() = reactRenderResize.component {
                 attrs {
                     windowWidth = window.width
                     windowHeight = window.height
-                    coverImageUrl = "https://savvyapps.com/runtime/uploads/blog/3425/2017.04_17-kotlinTips_170419_091147_871d0356adaf9e2d853d7f997a76ee78.jpg"
+                    coverImageUrl = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/41045770_1179593592178688_4000621135526887424_o.jpg?_nc_fx=fbkk1-1&_nc_cat=0&_nc_eui2=AeEnLLjwWEnRHxRDFa1QUtN8ThTI2z0hC1MhtkpMPwrw-S2s2g-svImMrnPCFIWBUP0Sz7Es5-XDHVJKWZQCsQEj91aDt1maZtMzsKGRSlg5Lg&oh=80d04173611bbe2a64a086e55fd8c5cb&oe=5C2CCA50"
                 }
             }
         }
