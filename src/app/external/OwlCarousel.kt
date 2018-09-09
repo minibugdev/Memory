@@ -9,7 +9,8 @@ external val OwlCarousel: RClass<OwlCarouselProps>
 external interface OwlCarouselProps : RProps {
     var className: String
     var items: Int
+    var slideBy: Int
+    var dots: Boolean
     var nav: Boolean
-    var autoWidth: Boolean
     var navText: Array<String>
 }

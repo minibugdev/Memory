@@ -6,11 +6,14 @@ import app.firebase.FirebaseConfig
 import app.firebase.FirebaseOperation
 import app.firebase.firebase
 import app.models.Message
+import app.models.Story
 import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 import react.*
 import react.dom.div
 import styled.*
+import kotlin.js.Math
+import kotlin.math.ceil
 
 @JsModule("src/app/images/next.png")
 external val iconNext: dynamic
@@ -88,52 +91,65 @@ class App : RComponent<AppProps, AppState>() {
 
             styledDiv {
                 css { +storyStyles.layout }
-                styledH1 {
-                    css {
-                        color = Color.white
-                    }
-                    +"OUR STORY"
-                }
 
-                OwlCarousel {
-                    attrs {
-                        className = "owl-theme"
-                        items = 6
-                        autoWidth = true
-                        nav = true
-                        navText = arrayOf("<img src='$iconPrev'/>", "<img src='$iconNext'/>")
+                styledDiv {
+                    css { +storyStyles.cover }
+
+                    styledH1 {
+                        css {
+                            color = Color.white
+                        }
+                        +"OUR STORY"
                     }
 
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
-                    story(StoryPosition.TOP, storyStyles)
-                    story(StoryPosition.BOTTOM, storyStyles)
+                    OwlCarousel {
+                        attrs {
+                            className = "owl-theme"
+                            items = props.windowWidth / 250
+                            slideBy = 2
+                            dots = false
+                            nav = true
+                            navText = arrayOf("<img src='$iconPrev'/>", "<img src='$iconNext'/>")
+                        }
+
+                        val stories = listOf(
+                                Story("March 1990", "Pop was born in Chiang Rai"),
+                                Story("October 1990", "Ting was born in Chiang Mai"),
+                                Story("2008", "Pop arrive at Computer Science, Chiang Mai University"),
+                                Story("2009", "Ting arrive at Computer Science, Chiang Mai University"),
+                                Story("2009 - 2012", "Pop take care Ting"),
+                                Story("2012", "Pop graduate from Chiang Mai University"),
+                                Story("2013", "Ting graduate from Chiang Mai University"),
+                                Story("2013", "Pop moves from Chiang Mai to Bangkok, Thailand"),
+                                Story("2015", "Ting moves to Muscut, Oman"),
+                                Story("15 September 2017", "Meet again after 4 years"),
+                                Story("13 October 2017", "In Relationship"),
+                                Story("27 March 2018", "Will you marry me?"),
+                                Story("15 September 2018", "Merry"))
+
+                        stories.forEachIndexed { index, story ->
+                            val position = if (index % 2 == 0) StoryPosition.TOP else StoryPosition.BOTTOM
+                            story(story, position, storyStyles)
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun RBuilder.story(position: StoryPosition, style: StoryStyles): ReactElement {
+    private fun RBuilder.story(story: Story, position: StoryPosition, style: StoryStyles): ReactElement {
         return styledDiv {
             if (position == StoryPosition.TOP) {
                 styledDiv {
                     css { +style.fixheight }
                     styledH4 {
                         css { +style.storytop }
-                        +"October 1990"
+                        +story.title
                     }
 
                     styledP {
                         css { +style.story }
-                        +"Ting was born in Chiang Rai"
+                        +story.details
                     }
                 }
 
@@ -148,11 +164,11 @@ class App : RComponent<AppProps, AppState>() {
                     styledH4 { css { +style.blankstory } }
                     styledH4 {
                         css { +style.storybottom }
-                        +"March 1990"
+                        +story.title
                     }
                     styledP {
                         css { +style.story }
-                        +"Pop was born in Chiang Rai"
+                        +story.details
                     }
                 }
             }
@@ -165,11 +181,15 @@ class App : RComponent<AppProps, AppState>() {
 
     private inner class StoryStyles : StyleSheet("StoryStyles") {
         val layout by css {
-            padding(40.px, 0.px)
             backgroundImage = Image("url('${props.storyImageUrl}')")
             backgroundRepeat = BackgroundRepeat.noRepeat
             backgroundPosition = "center"
             backgroundSize = "cover"
+        }
+
+        val cover by css {
+            padding(40.px, 0.px)
+            backgroundColor = Color.black.withAlpha(0.5)
         }
 
         val fixheight by css {
@@ -242,7 +262,7 @@ class App : RComponent<AppProps, AppState>() {
         }
 
         val cover by css {
-            backgroundColor = Color.white.withAlpha(0.5)
+            backgroundColor = Color.white.withAlpha(0.4)
 
             width = props.windowWidth.px
             height = props.windowHeight.px
@@ -257,8 +277,8 @@ fun RBuilder.app() = reactRenderResize.component {
                 attrs {
                     windowWidth = window.width
                     windowHeight = window.height
-                    coverImageUrl = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/41045770_1179593592178688_4000621135526887424_o.jpg?_nc_fx=fbkk1-1&_nc_cat=0&_nc_eui2=AeEnLLjwWEnRHxRDFa1QUtN8ThTI2z0hC1MhtkpMPwrw-S2s2g-svImMrnPCFIWBUP0Sz7Es5-XDHVJKWZQCsQEj91aDt1maZtMzsKGRSlg5Lg&oh=80d04173611bbe2a64a086e55fd8c5cb&oe=5C2CCA50"
-                    storyImageUrl = "https://scontent.fbkk1-4.fna.fbcdn.net/v/t1.0-9/40973628_1179594778845236_2662423675302576128_o.jpg?_nc_fx=fbkk1-1&_nc_cat=0&_nc_eui2=AeE_-vF_0Ga_vnzWfK2ZAc8VKzagHkm_sqwKqODoTkBlHPVWSS9QWu7OfP_ZMBrFWT-UHEXkKhuS4fBHaSSC3BmuPkxP1PXIiVAS3_lzDCh7sg&oh=722402406f816464c906f6cc446b880f&oe=5C244750"
+                    coverImageUrl = "https://firebasestorage.googleapis.com/v0/b/tingpop-project.appspot.com/o/IMG_8061_opt.jpg?alt=media&token=dd7c6260-7c0e-41ed-9643-170a73c5b8f2"
+                    storyImageUrl = "https://firebasestorage.googleapis.com/v0/b/tingpop-project.appspot.com/o/IMG_7743_opt.jpg?alt=media&token=1dfb723f-a9de-445f-8c45-089aac290835"
                 }
             }
         }
