@@ -1,6 +1,5 @@
 package app
 
-import app.external.Options
 import app.external.OwlCarousel
 import app.external.reactRenderResize
 import app.firebase.FirebaseConfig
@@ -10,10 +9,13 @@ import app.models.Message
 import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 import react.*
-import react.dom.br
 import react.dom.div
-import react.dom.strong
 import styled.*
+
+@JsModule("src/app/images/next.png")
+external val iconNext: dynamic
+@JsModule("src/app/images/prev.png")
+external val iconPrev: dynamic
 
 interface AppState : RState {
     var messages: Array<Message>
@@ -68,27 +70,25 @@ class App : RComponent<AppProps, AppState>() {
 
             styledDiv {
                 css {
-                    padding(60.px, 0.px)
-                    fontSize = 18.px
                     backgroundColor = Color("#EEEEEE")
+                    margin(0.px)
+                    padding(60.px, 0.px)
                 }
-                styledP {
-                    css {
-                        lineHeight = LineHeight("1.8em")
-                    }
+                div {
                     +"On the 15th of September, 2018"
-                    br {}
-                    strong {
-                        +"Unchalee Saechang & Teeranai Buddee"
-                    }
-                    br {}
+                }
+                styledH3 {
+                    css { margin(10.px, 0.px) }
+                    +"Unchalee Saechang & Teeranai Buddee"
+                }
+                div {
                     +"eloped in Kong Garden View Resort, Chiang Rai"
                 }
             }
 
             styledDiv {
                 css { +storyStyles.layout }
-                styledH2 {
+                styledH1 {
                     css {
                         color = Color.white
                     }
@@ -97,7 +97,11 @@ class App : RComponent<AppProps, AppState>() {
 
                 OwlCarousel {
                     attrs {
-                        options = Options(items = 6, autoWidth = true, nav = false, rewind = false, dots = true)
+                        className = "owl-theme"
+                        items = 6
+                        autoWidth = true
+                        nav = true
+                        navText = arrayOf("<img src='$iconPrev'/>", "<img src='$iconNext'/>")
                     }
 
                     story(StoryPosition.TOP, storyStyles)
@@ -122,7 +126,7 @@ class App : RComponent<AppProps, AppState>() {
             if (position == StoryPosition.TOP) {
                 styledDiv {
                     css { +style.fixheight }
-                    styledDiv {
+                    styledH4 {
                         css { +style.storytop }
                         +"October 1990"
                     }
