@@ -5,6 +5,7 @@
   "dependencies": {
     "@jetbrains/kotlin-css": "^1.0.0-pre.49",
     "@jetbrains/kotlin-css-js": "^1.0.0-pre.49",
+    "@jetbrains/kotlin-extensions": "^1.0.1-pre.49",
     "@jetbrains/kotlin-react": "^16.4.2-pre.49",
     "@jetbrains/kotlin-react-dom": "^16.4.2-pre.49",
     "@jetbrains/kotlin-styled": "^1.0.0-pre.49",
@@ -12,6 +13,7 @@
     "inline-style-prefixer": "^4.0.2",
     "react": "16.5.0",
     "react-dom": "16.5.0",
+    "react-owl-carousel2": "^0.3.0",
     "react-resize-render": "1.3.7",
     "semantic-ui-css": "2.3.3",
     "semantic-ui-react": "^0.82.3",
