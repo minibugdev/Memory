@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="js/jquery-1.10.2.min.js"></script>
+    <script src="js/jquery.firefly-0.7.min.js"></script>
+    <script>
+        $(window).load(function () {
+            $.firefly({
+                color: '#ffffff',
+                minPixel: 2,
+                maxPixel: 5,
+                total: 120,
+                on: '#root'
+            });
+        });
+    </script>
+
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -23,7 +36,7 @@
     -->
 
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Open+Sans:300" rel="stylesheet">
-    <title>React Kotlin App</title>
+    <title>Ting & Pop</title>
   </head>
   <body>
     <noscript>
