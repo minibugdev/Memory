@@ -14,6 +14,10 @@ import react.dom.div
 import react.dom.img
 import styled.*
 
+@JsModule("src/app/images/logo.png")
+external val logo: dynamic
+@JsModule("src/app/images/knot.png")
+external val knot: dynamic
 @JsModule("src/app/images/next.png")
 external val iconNext: dynamic
 @JsModule("src/app/images/prev.png")
@@ -70,23 +74,36 @@ class App : RComponent<AppProps, AppState>() {
         div {
             styledDiv {
                 css { +componentStyles.cover }
+                styledImg(src = logo as? String) {
+                    css {
+                        position = Position.absolute
+                        left = 0.px
+                        right = 0.px
+                        top = 0.px
+                        bottom = 0.px
+                        margin(LinearDimension.auto)
+                    }
+                }
             }
 
             styledDiv {
                 css {
                     backgroundColor = Color("#EEEEEE")
                     margin(0.px)
-                    padding(60.px, 0.px)
+                    padding(80.px, 0.px)
                 }
                 div {
                     +"On the 15th of September, 2018"
                 }
                 styledH3 {
                     css { margin(10.px, 0.px) }
-                    +"Unchalee Saechang & Teeranai Buddee"
+                    +"Unchalee Saechang (Ting) & Teeranai Buddee (Pop)"
                 }
                 div {
                     +"eloped in Kong Garden View Resort, Chiang Rai"
+                }
+                styledImg(src = knot as? String){
+                    css { width = 100.px }
                 }
             }
 
@@ -270,7 +287,7 @@ class App : RComponent<AppProps, AppState>() {
         }
 
         val cover by css {
-            backgroundColor = Color.white.withAlpha(0.4)
+            backgroundColor = Color.black.withAlpha(0.35)
 
             width = props.windowWidth.px
             height = props.windowHeight.px
