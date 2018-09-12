@@ -1,6 +1,8 @@
 package app
 
+import app.external.GalleryImage
 import app.external.OwlCarousel
+import app.external.reactGallery
 import app.external.reactRenderResize
 import app.firebase.FirebaseConfig
 import app.firebase.FirebaseOperation
@@ -79,7 +81,7 @@ class App : RComponent<AppProps, AppState>() {
                         position = Position.absolute
                         left = 0.px
                         right = 0.px
-                        top = 0.px
+                        top = 50.px
                         bottom = 0.px
                         margin(LinearDimension.auto)
                     }
@@ -102,7 +104,7 @@ class App : RComponent<AppProps, AppState>() {
                 div {
                     +"eloped in Kong Garden View Resort, Chiang Rai"
                 }
-                styledImg(src = knot as? String){
+                styledImg(src = knot as? String) {
                     css { width = 100.px }
                 }
             }
@@ -150,6 +152,72 @@ class App : RComponent<AppProps, AppState>() {
                             val position = if (index % 2 == 0) StoryPosition.BOTTOM else StoryPosition.TOP
                             story(story, position, storyStyles)
                         }
+                    }
+                }
+            }
+
+            styledDiv {
+                css {
+                    padding(100.px, 0.px)
+                    backgroundColor = Color("#ffffff")
+                    overflow = Overflow.auto
+                }
+
+                reactGallery {
+                    attrs {
+                        id = "our-gallery"
+                        enableImageSelection = false
+                        margin = 1
+                        images = arrayOf(
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnailWidth = 16, thumbnailHeight = 9),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnailWidth = 1, thumbnailHeight = 1),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnailWidth = 16, thumbnailHeight = 9),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnailWidth = 1, thumbnailHeight = 1),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
+                                        thumbnailWidth = 16, thumbnailHeight = 9),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
+                                        thumbnailWidth = 4, thumbnailHeight = 3),
+                                GalleryImage(
+                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
+                                        thumbnailWidth = 1, thumbnailHeight = 1)
+                        )
                     }
                 }
             }
