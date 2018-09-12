@@ -90,7 +90,7 @@ class App : RComponent<AppProps, AppState>() {
                 css {
                     backgroundColor = Color("#EEEEEE")
                     margin(0.px)
-                    padding(80.px, 0.px)
+                    padding(80.px, 30.px)
                 }
                 div {
                     +"On the 15th of September, 2018"
