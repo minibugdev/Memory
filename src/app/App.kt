@@ -4,9 +4,9 @@ import app.external.GalleryImage
 import app.external.OwlCarousel
 import app.external.reactGallery
 import app.external.reactRenderResize
-import app.firebase.FirebaseConfig
-import app.firebase.FirebaseOperation
-import app.firebase.firebase
+import app.external.FirebaseConfig
+import app.external.FirebaseOperation
+import app.external.firebase
 import app.models.Message
 import app.models.Story
 import kotlinx.css.*

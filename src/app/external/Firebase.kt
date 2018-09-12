@@ -1,4 +1,4 @@
-package app.firebase
+package app.external
 
 @JsModule("firebase")
 external val firebase: Firebase
