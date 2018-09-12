@@ -9,6 +9,8 @@
     "@jetbrains/kotlin-react": "^16.4.2-pre.49",
     "@jetbrains/kotlin-react-dom": "^16.4.2-pre.49",
     "@jetbrains/kotlin-styled": "^1.0.0-pre.49",
+    "axios": "^0.18.0",
+    "cloudinary-core": "^2.5.0",
     "firebase": "^5.4.2",
     "inline-style-prefixer": "^4.0.2",
     "react": "16.5.0",
