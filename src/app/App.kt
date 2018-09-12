@@ -1,14 +1,9 @@
 package app
 
-import app.external.GalleryImage
-import app.external.OwlCarousel
-import app.external.reactGallery
-import app.external.reactRenderResize
-import app.external.FirebaseConfig
-import app.external.FirebaseOperation
-import app.external.firebase
+import app.external.*
 import app.models.Message
 import app.models.Story
+import kotlinext.js.jsObject
 import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 import react.*
@@ -29,6 +24,7 @@ external val iconRing: dynamic
 
 interface AppState : RState {
     var messages: Array<Message>
+    var galleryImagePublicIds: Array<String>
 }
 
 interface AppProps : RProps {
@@ -54,6 +50,7 @@ class App : RComponent<AppProps, AppState>() {
 
     override fun AppState.init() {
         messages = emptyArray()
+        galleryImagePublicIds = emptyArray()
     }
 
     override fun componentDidMount() {
@@ -63,6 +60,17 @@ class App : RComponent<AppProps, AppState>() {
                         messages = it.value()
                     }
                 }
+
+        val config: AxiosConfigSettings = jsObject { url = "http://res.cloudinary.com/ting-pop/image/list/wedding.json" }
+        axios<ResourceResponse>(config).then { response ->
+            console.log(response.data)
+            setState {
+                galleryImagePublicIds = response.data.resources.map { it.publicId }.toTypedArray()
+            }
+        }.catch { error ->
+            console.log(error)
+        }
+
     }
 
     override fun RBuilder.render() {
@@ -163,61 +171,43 @@ class App : RComponent<AppProps, AppState>() {
                     overflow = Overflow.auto
                 }
 
-                reactGallery {
-                    attrs {
-                        id = "our-gallery"
-                        enableImageSelection = false
-                        margin = 1
-                        images = arrayOf(
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnailWidth = 16, thumbnailHeight = 9),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnailWidth = 1, thumbnailHeight = 1),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnailWidth = 16, thumbnailHeight = 9),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnailWidth = 1, thumbnailHeight = 1),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnail = "https://scontent.fbkk1-2.fna.fbcdn.net/v/t1.0-9/41013807_1178549848949729_6259026737762402304_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeEynShtsUAie_yOH5GENov7VIR_ZbwbowW07lr4zxHEjAT2BZcm7Wv6MG937OBsE2rAV5WMGAga2lrN8vIzzEqO5icgqc2A7gQJunzyYbhQ9g&oh=e542307b723ca5e470f6f92037595cc7&oe=5C214E7A",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnail = "https://scontent.fbkk1-1.fna.fbcdn.net/v/t1.0-9/40790094_1178550178949696_691511510140190720_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeHOUNLCdiGP_rcIrsm0wcCtTmsHKANAweaz-I0ZGohJ2yQGCKxnoICRNOY0r_7lmZthtrGxt9oR__p8Alyq0LtobXwV4rhAl64FKmk_sr2vwQ&oh=43f2db821974f3015bb48d983ed61665&oe=5C32AF67",
-                                        thumbnailWidth = 16, thumbnailHeight = 9),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnail = "https://scontent.fbkk1-5.fna.fbcdn.net/v/t1.0-9/40752508_1178549645616416_5615856514762801152_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeFkq8qjgakwQ0X6iW18QAIODNstwYtEROybb42bJ8WI7BFKlzmc_w8aJ_4S0oi1oYerMGs6XlJfY0sgETSe1IluJn0KeUAF37o6oK_Z_k1aNA&oh=36e89fa24db1c11394a47380cfe67587&oe=5C1CE6B2",
-                                        thumbnailWidth = 4, thumbnailHeight = 3),
-                                GalleryImage(
-                                        src = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnail = "https://scontent.fbkk1-6.fna.fbcdn.net/v/t1.0-9/40988434_1178549735616407_1621223293790978048_o.jpg?_nc_fx=fbkk1-5&_nc_cat=0&_nc_eui2=AeG8DzHGiBHtxWeCjMAsSO-lnNRbaHHGYh5inuBkNRQnelc6wyUIDthHlFf4pXIhcJHOisWUh5JPogO-FFVobuuNzEHAbm3CxMyjUdOU40Fs0Q&oh=09e2d6711399c8173fc833296566aaa0&oe=5C2C9683",
-                                        thumbnailWidth = 1, thumbnailHeight = 1)
-                        )
+                if (state.galleryImagePublicIds.isNotEmpty()) {
+                    val cl = cloudinary.Core.new(jsObject{
+                        cloudName = "ting-pop"
+                    })
+                    val galleryImages = state.galleryImagePublicIds.mapIndexed { index, publicId ->
+
+                        val ratio = getImageRatio(index)
+                        val ratioTransformation = jsObject<Transformation> {
+                            aspectRatio = "${ratio.width}:${ratio.height}"
+                            crop = "fill"
+                        }
+                        val widthTransformation = jsObject<Transformation> {
+                            width = "400"
+                            dpr = "auto"
+                            crop = "scale"
+                        }
+                        GalleryImage(
+                                src = cl.url(publicId, jsObject {
+                                    transformation = arrayOf(jsObject {
+                                        width = "2048"
+                                        crop = "fit"
+                                    })
+                                }),
+                                thumbnail = cl.url(publicId, jsObject {
+                                    quality = 60
+                                    transformation = arrayOf(ratioTransformation, widthTransformation)
+                                }),
+                                thumbnailWidth = ratio.width, thumbnailHeight = ratio.height)
+                    }.toTypedArray()
+
+                    reactGallery {
+                        attrs {
+                            id = "our-gallery"
+                            enableImageSelection = false
+                            margin = 1
+                            images = galleryImages
+                        }
                     }
                 }
             }
@@ -267,6 +257,14 @@ class App : RComponent<AppProps, AppState>() {
             }
         }
     }
+
+    private fun getImageRatio(index: Int): ImageRatio = when (index % 9) {
+        2, 4, 6, 7 -> ImageRatio(4, 3)
+        1, 5, 3 -> ImageRatio(1, 1)
+        else -> ImageRatio(16, 9)
+    }
+
+    private data class ImageRatio(val width: Int, val height: Int)
 
     private enum class StoryPosition {
         TOP, BOTTOM
