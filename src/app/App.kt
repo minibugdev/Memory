@@ -11,14 +11,15 @@ import kotlinx.css.*
 import kotlinx.css.properties.LineHeight
 import react.*
 import react.dom.div
+import react.dom.img
 import styled.*
-import kotlin.js.Math
-import kotlin.math.ceil
 
 @JsModule("src/app/images/next.png")
 external val iconNext: dynamic
 @JsModule("src/app/images/prev.png")
 external val iconPrev: dynamic
+@JsModule("src/app/images/ring.png")
+external val iconRing: dynamic
 
 interface AppState : RState {
     var messages: Array<Message>
@@ -117,18 +118,19 @@ class App : RComponent<AppProps, AppState>() {
                                 Story("October 1990", "Ting was born in Chiang Mai"),
                                 Story("2008", "Pop arrive at Computer Science, Chiang Mai University"),
                                 Story("2009", "Ting arrive at Computer Science, Chiang Mai University"),
-                                Story("2009 - 2012", "Pop take care Ting"),
+                                Story("2009 - 2012", "Special care senior-junior relationship by lucky draw"),
                                 Story("2012", "Pop graduate from Chiang Mai University"),
                                 Story("2013", "Ting graduate from Chiang Mai University"),
                                 Story("2013", "Pop moves from Chiang Mai to Bangkok, Thailand"),
-                                Story("2015", "Ting moves to Muscut, Oman"),
-                                Story("15 September 2017", "Meet again after 4 years"),
-                                Story("13 October 2017", "In Relationship"),
+                                Story("2014", "Ting moves to Muscut, Oman"),
+                                Story("July 2017", "Meet again after 4 years"),
+                                Story("September 2017", "First date :)"),
+                                Story("October 2017", "In Relationship"),
                                 Story("27 March 2018", "Will you marry me?"),
-                                Story("15 September 2018", "Merry"))
+                                Story("15 September 2018", "Happy wedding day", iconRing as? String))
 
                         stories.forEachIndexed { index, story ->
-                            val position = if (index % 2 == 0) StoryPosition.TOP else StoryPosition.BOTTOM
+                            val position = if (index % 2 == 0) StoryPosition.BOTTOM else StoryPosition.TOP
                             story(story, position, storyStyles)
                         }
                     }
@@ -144,6 +146,9 @@ class App : RComponent<AppProps, AppState>() {
                     css { +style.fixheight }
                     styledH4 {
                         css { +style.storytop }
+                        story.icon?.let { icon ->
+                            img(src = icon) {}
+                        }
                         +story.title
                     }
 
@@ -164,6 +169,9 @@ class App : RComponent<AppProps, AppState>() {
                     styledH4 { css { +style.blankstory } }
                     styledH4 {
                         css { +style.storybottom }
+                        story.icon?.let { icon ->
+                            img(src = icon) {}
+                        }
                         +story.title
                     }
                     styledP {

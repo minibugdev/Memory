@@ -21,3 +21,8 @@ h1, h2, h3, h4, h5 {
     top: 19%;
     position: absolute;
 }
+
+.owl-theme .owl-item img {
+    width: 83px!important;
+    margin: auto auto 10px auto;
+}
