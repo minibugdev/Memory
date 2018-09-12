@@ -11,6 +11,10 @@ import react.dom.div
 import react.dom.img
 import styled.*
 
+@JsModule("src/app/images/cover.jpg")
+external val coverImage: dynamic
+@JsModule("src/app/images/our_story.jpg")
+external val ourStoryImage: dynamic
 @JsModule("src/app/images/logo.png")
 external val logo: dynamic
 @JsModule("src/app/images/knot.png")
@@ -368,8 +372,8 @@ fun RBuilder.app() = reactRenderResize.component {
                 attrs {
                     windowWidth = window.width
                     windowHeight = window.height
-                    coverImageUrl = "https://firebasestorage.googleapis.com/v0/b/tingpop-project.appspot.com/o/IMG_8061_opt.jpg?alt=media&token=dd7c6260-7c0e-41ed-9643-170a73c5b8f2"
-                    storyImageUrl = "https://firebasestorage.googleapis.com/v0/b/tingpop-project.appspot.com/o/IMG_7743_opt.jpg?alt=media&token=1dfb723f-a9de-445f-8c45-089aac290835"
+                    coverImageUrl = coverImage
+                    storyImageUrl = ourStoryImage
                 }
             }
         }
