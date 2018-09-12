@@ -65,11 +65,14 @@ class App : RComponent<AppProps, AppState>() {
                     }
                 }
 
-        val config: AxiosConfigSettings = jsObject { url = "http://res.cloudinary.com/ting-pop/image/list/wedding.json" }
+        val config: AxiosConfigSettings = jsObject { url = "https://res.cloudinary.com/ting-pop/image/list/wedding.json" }
         axios<ResourceResponse>(config).then { response ->
             console.log(response.data)
             setState {
-                galleryImagePublicIds = response.data.resources.map { it.publicId }.toTypedArray()
+                galleryImagePublicIds = response.data.resources
+                        .map { it.publicId }
+                        .sortedDescending()
+                        .toTypedArray()
             }
         }.catch { error ->
             console.log(error)
