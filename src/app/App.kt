@@ -27,7 +27,8 @@ external val iconRing: dynamic
 
 interface AppState : RState {
     var messages: Array<Message>
-    var galleryImagePublicIds: Array<String>
+    var preWeddingImagePublicIds: Array<String>
+    var weddingImagePublicIds: Array<String>
 }
 
 interface AppProps : RProps {
@@ -53,7 +54,8 @@ class App : RComponent<AppProps, AppState>() {
 
     override fun AppState.init() {
         messages = emptyArray()
-        galleryImagePublicIds = emptyArray()
+        preWeddingImagePublicIds = emptyArray()
+        weddingImagePublicIds = emptyArray()
     }
 
     override fun componentDidMount() {
@@ -64,10 +66,10 @@ class App : RComponent<AppProps, AppState>() {
                     }
                 }
 
-        val config: AxiosConfigSettings = jsObject { url = "https://res.cloudinary.com/ting-pop/image/list/wedding.json" }
-        axios<ResourceResponse>(config).then { response ->
+        val weddingConfig: AxiosConfigSettings = jsObject { url = "https://res.cloudinary.com/ting-pop/image/list/15sep.json" }
+        axios<ResourceResponse>(weddingConfig).then { response ->
             setState {
-                galleryImagePublicIds = response.data.resources
+                weddingImagePublicIds = response.data.resources
                         .map { it.publicId }
                         .sortedDescending()
                         .toTypedArray()
@@ -76,6 +78,17 @@ class App : RComponent<AppProps, AppState>() {
             console.log(error)
         }
 
+        val preWeddingConfig: AxiosConfigSettings = jsObject { url = "https://res.cloudinary.com/ting-pop/image/list/2sep.json" }
+        axios<ResourceResponse>(preWeddingConfig).then { response ->
+            setState {
+                preWeddingImagePublicIds = response.data.resources
+                        .map { it.publicId }
+                        .sortedDescending()
+                        .toTypedArray()
+            }
+        }.catch { error ->
+            console.log(error)
+        }
     }
 
     override fun RBuilder.render() {
@@ -171,6 +184,130 @@ class App : RComponent<AppProps, AppState>() {
 
             styledDiv {
                 css {
+                    padding(80.px, 0.px, 0.px, 0.px)
+                    backgroundColor = Color("#ffffff")
+                    overflow = Overflow.auto
+                }
+
+                if (state.weddingImagePublicIds.isNotEmpty()) {
+                    h1 {
+                        +"Wedding"
+                    }
+
+                    val cl = cloudinary.Core.new(jsObject {
+                        cloudName = "ting-pop"
+                    })
+                    val galleryImages = state.weddingImagePublicIds.mapIndexed { index, publicId ->
+
+                        val ratio = getImageRatio(index)
+                        val ratioTransformation = jsObject<Transformation> {
+                            aspectRatio = "${ratio.width}:${ratio.height}"
+                            crop = "fill"
+                        }
+                        val widthTransformation = jsObject<Transformation> {
+                            width = "400"
+                            dpr = "auto"
+                            crop = "scale"
+                        }
+                        GalleryImage(
+                                src = cl.url(publicId, jsObject {
+                                    transformation = arrayOf(jsObject {
+                                        width = "2048"
+                                        crop = "fit"
+                                    })
+                                }),
+                                thumbnail = cl.url(publicId, jsObject {
+                                    quality = 60
+                                    transformation = arrayOf(ratioTransformation, widthTransformation)
+                                }),
+                                thumbnailWidth = ratio.width, thumbnailHeight = ratio.height)
+                    }.toTypedArray()
+
+                    reactGallery {
+                        attrs {
+                            id = "wedding"
+                            enableImageSelection = false
+                            margin = 1
+                            images = galleryImages
+                        }
+                    }
+                }
+            }
+            styledDiv {
+                css {
+                    padding(0.px, 0.px, 100.px, 0.px)
+                    backgroundColor = Color("#ffffff")
+                    overflow = Overflow.auto
+                }
+
+                if (state.preWeddingImagePublicIds.isNotEmpty()) {
+                    styledH1 {
+                        css {
+                            paddingTop = 40.px
+                        }
+                        +"Pre Wedding"
+                    }
+
+                    val cl = cloudinary.Core.new(jsObject {
+                        cloudName = "ting-pop"
+                    })
+                    val galleryImages = state.preWeddingImagePublicIds.mapIndexed { index, publicId ->
+
+                        val ratio = getImageRatio(index)
+                        val ratioTransformation = jsObject<Transformation> {
+                            aspectRatio = "${ratio.width}:${ratio.height}"
+                            crop = "fill"
+                        }
+                        val widthTransformation = jsObject<Transformation> {
+                            width = "400"
+                            dpr = "auto"
+                            crop = "scale"
+                        }
+                        GalleryImage(
+                                src = cl.url(publicId, jsObject {
+                                    transformation = arrayOf(jsObject {
+                                        width = "2048"
+                                        crop = "fit"
+                                    })
+                                }),
+                                thumbnail = cl.url(publicId, jsObject {
+                                    quality = 60
+                                    transformation = arrayOf(ratioTransformation, widthTransformation)
+                                }),
+                                thumbnailWidth = ratio.width, thumbnailHeight = ratio.height)
+                    }.toTypedArray()
+
+                    reactGallery {
+                        attrs {
+                            id = "pre-wedding"
+                            enableImageSelection = false
+                            margin = 1
+                            images = galleryImages
+                        }
+                    }
+                }
+            }
+
+            styledDiv {
+                css {
+                    backgroundColor = Color.white
+                }
+                styledIframe {
+                    css {
+                        border = "0"
+                        margin(0.px)
+                        padding(0.px)
+                    }
+                    attrs {
+                        src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3751.74940046674!2d99.84863131491393!3d19.892800986624636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30d7064f17cbc839%3A0x486f6aedfce304cc!2sKong+Garden+View+Resort+Chiang+Rai!5e0!3m2!1sen!2sth!4v1536967871345"
+                        width = "100%"
+                        height = "400"
+                    }
+                }
+            }
+
+            styledDiv {
+                css {
                     backgroundColor = Color.white
                     margin(0.px)
                     padding(80.px, 0.px)
@@ -240,7 +377,7 @@ class App : RComponent<AppProps, AppState>() {
                                 css {
                                     width = 100.px
                                 }
-                                +"11.00 - 13.00"
+                                +"11.00 - 14.00"
                             }
                             styledTd {
                                 css {
@@ -254,72 +391,6 @@ class App : RComponent<AppProps, AppState>() {
 
                 styledImg(src = knot as? String) {
                     css { width = 100.px }
-                }
-            }
-
-            styledDiv {
-                css {
-                    backgroundColor = Color.white
-                }
-                styledIframe {
-                    css {
-                        border = "0"
-                        margin(0.px)
-                        padding(0.px)
-                    }
-                    attrs {
-                        src = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3751.74940046674!2d99.84863131491393!3d19.892800986624636!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30d7064f17cbc839%3A0x486f6aedfce304cc!2sKong+Garden+View+Resort+Chiang+Rai!5e0!3m2!1sen!2sth!4v1536967871345"
-                        width = "100%"
-                        height = "400"
-                    }
-                }
-            }
-
-            styledDiv {
-                css {
-                    padding(100.px, 0.px)
-                    backgroundColor = Color("#ffffff")
-                    overflow = Overflow.auto
-                }
-
-                if (state.galleryImagePublicIds.isNotEmpty()) {
-                    val cl = cloudinary.Core.new(jsObject {
-                        cloudName = "ting-pop"
-                    })
-                    val galleryImages = state.galleryImagePublicIds.mapIndexed { index, publicId ->
-
-                        val ratio = getImageRatio(index)
-                        val ratioTransformation = jsObject<Transformation> {
-                            aspectRatio = "${ratio.width}:${ratio.height}"
-                            crop = "fill"
-                        }
-                        val widthTransformation = jsObject<Transformation> {
-                            width = "400"
-                            dpr = "auto"
-                            crop = "scale"
-                        }
-                        GalleryImage(
-                                src = cl.url(publicId, jsObject {
-                                    transformation = arrayOf(jsObject {
-                                        width = "2048"
-                                        crop = "fit"
-                                    })
-                                }),
-                                thumbnail = cl.url(publicId, jsObject {
-                                    quality = 60
-                                    transformation = arrayOf(ratioTransformation, widthTransformation)
-                                }),
-                                thumbnailWidth = ratio.width, thumbnailHeight = ratio.height)
-                    }.toTypedArray()
-
-                    reactGallery {
-                        attrs {
-                            id = "our-gallery"
-                            enableImageSelection = false
-                            margin = 1
-                            images = galleryImages
-                        }
-                    }
                 }
             }
         }
