@@ -26,7 +26,6 @@ external val iconPrev: dynamic
 external val iconRing: dynamic
 
 interface AppState : RState {
-    var messages: Array<Message>
     var preWeddingImagePublicIds: Array<String>
     var weddingImagePublicIds: Array<String>
 }
@@ -39,33 +38,12 @@ interface AppProps : RProps {
 }
 
 class App : RComponent<AppProps, AppState>() {
-    private val database by lazy {
-        FirebaseConfig(projectId = "tingpop-project",
-                apiKey = "AIzaSyDvGg75Qax-8DYEsvcK2cTQr6AQ4v4tHQk",
-                authDomain = "tingpop-project.firebaseapp.com",
-                databaseURL = "https://tingpop-project.firebaseio.com",
-                storageBucket = "",
-                messagingSenderId = "471059879010")
-                .run {
-                    firebase.initializeApp(config = this)
-                    firebase.database()
-                }
-    }
-
     override fun AppState.init() {
-        messages = emptyArray()
         preWeddingImagePublicIds = emptyArray()
         weddingImagePublicIds = emptyArray()
     }
 
     override fun componentDidMount() {
-        database.ref("messages")
-                .on<Array<Message>>(FirebaseOperation.VALUE) {
-                    setState {
-                        messages = it.value()
-                    }
-                }
-
         val weddingConfig: AxiosConfigSettings = jsObject { url = "https://res.cloudinary.com/ting-pop/image/list/15sep.json" }
         axios<ResourceResponse>(weddingConfig).then { response ->
             setState {
